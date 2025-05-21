@@ -50,11 +50,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        scrolled ? " py-2" : "bg-transparent py-4"
-      }`}
-    >
+    <nav className={`fixed w-full z-50 transition-all duration-300`}>
       {/* Simulated glow using Tailwind gradient/blur layers */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div className="w-full h-full bg-gradient-radial  blur-2xl"></div>
@@ -71,12 +67,15 @@ export default function Navbar() {
             <Image
               src="/logo.png"
               alt="Birds Marketing Agency"
-              width={1200}
-              height={120}
-              className="h-20 w-auto" // Increased height from h-12 to h-20
+              width={400} // زودنا العرض شوية كمان
+              height={100}
+              priority // لسرعة التحميل
+              sizes="(max-width: 768px) 180px, 400px"
+              className="h-32 w-auto" // 🔥 اللوجو أكبر دلوقتي
             />
           </motion.div>
         </Link>
+
         {/* Nav Links */}
         <motion.div
           className="hidden md:flex items-center bg-gray-800/50 bg-opacity-80 rounded-full px-4 py-2 space-x-6"
