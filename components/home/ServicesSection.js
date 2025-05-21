@@ -21,7 +21,7 @@ export default function ServicesSection() {
   };
 
   return (
-    <section className=" text-white py-20 px-6 lg:px-12">
+    <section className=" text-white py-20 px-6 lg:px-12" id="services-section">
       <div className="max-w-7xl mx-auto">
         {/* Top Section */}
         <div className="flex flex-col lg:flex-row items-start gap-10">
