@@ -1,15 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ArrowDown } from "lucide-react";
 import FancyButton from "../ui/FancyButton";
 
 export default function HeroSection() {
-  const vantaRef = useRef(null);
-  const vantaEffectRef = useRef(null);
-
   // GSAP text animation
   useEffect(() => {
     const tl = gsap.timeline();
@@ -34,70 +31,6 @@ export default function HeroSection() {
     return () => tl.kill();
   }, []);
 
-  // Vanta background effect
-  useEffect(() => {
-    let mounted = true;
-
-    const loadVanta = async () => {
-      try {
-        const THREE = await import("three");
-        if (typeof window !== "undefined") {
-          window.THREE = THREE;
-          // Check WebGL availability
-          const canvas = document.createElement("canvas");
-          const gl =
-            canvas.getContext("webgl") ||
-            canvas.getContext("experimental-webgl");
-        }
-
-        const VANTA = await import("vanta/dist/vanta.birds.min.js");
-
-        if (vantaRef.current && !vantaEffectRef.current && mounted) {
-          vantaEffectRef.current = VANTA.default({
-            el: vantaRef.current,
-            mouseControls: true,
-            touchControls: true,
-            gyroControls: false,
-            minHeight: 200.0,
-            minWidth: 200.0,
-            scale: 1.0,
-            scaleMobile: 1.0,
-            backgroundColor: 0x0,
-            color1: 0xdf00ff,
-            color2: 0xff42,
-            birdSize: 2.1,
-            wingSpan: 19.0,
-            speedLimit: 4.0,
-            separation: 46.0,
-            alignment: 25.0,
-          });
-        } else {
-          console.warn(
-            "Vanta BIRDS not initialized: ref or component unmounted"
-          );
-        }
-      } catch (error) {
-        console.error("Vanta BIRDS initialization error:", error);
-      }
-    };
-
-    if (typeof window !== "undefined") {
-      loadVanta();
-    }
-
-    return () => {
-      mounted = false;
-      if (
-        vantaEffectRef.current &&
-        typeof vantaEffectRef.current.destroy === "function"
-      ) {
-        vantaEffectRef.current.destroy();
-        vantaEffectRef.current = null;
-      }
-    };
-  }, []);
-
-  // Scroll function
   const scrollToServices = () => {
     const servicesSection = document.getElementById("services-section");
     if (servicesSection) {
@@ -106,10 +39,23 @@ export default function HeroSection() {
   };
 
   return (
-    <section
-      ref={vantaRef}
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
-    >
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        playsInline
+        className="absolute inset-0 w-full h-full object-cover z-0"
+      >
+        <source src="/HeroVideo.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Overlay for readability (optional) */}
+      <div className="absolute inset-0 bg-black/50 z-0" />
+
+      {/* Content */}
       <div className="container mx-auto px-4 z-10 text-center">
         <motion.h1
           className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight"
@@ -137,14 +83,13 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.4 }}
         >
-          <FancyButton onClick={scrollToServices} className="">
-            Get Started
-          </FancyButton>
+          <FancyButton onClick={scrollToServices}>Get Started</FancyButton>
         </motion.div>
       </div>
 
+      {/* Bouncing arrow */}
       <motion.div
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2"
+        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-10"
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{
