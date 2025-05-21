@@ -5,11 +5,9 @@ import { motion } from "framer-motion";
 export default function ComingSoon() {
   return (
     <div
-      className="min-h-screen flex items-center justify-center relative px-4 lg:bg-cover sm:bg-contain md:bg-contain"
+      className="min-h-screen flex items-center justify-center relative px-4 bg-no-repeat bg-center bg-responsive"
       style={{
         backgroundImage: "url('/gogo.png')",
-        backgroundRepeat: "no-repeat",
-        backgroundPosition: "center",
       }}
     >
       {/* Text Content */}
