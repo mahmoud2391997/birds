@@ -101,7 +101,7 @@ export default function Navbar() {
             href="/book"
             className="bg-[#1f1f1f] border border-white text-white hover:bg-white hover:text-black px-4 py-2 rounded-full text-sm font-semibold transition duration-300"
           >
-            + Book Intro Call
+            + Schedule a meeting
           </Link>
         </div>
         {/* Mobile Navigation Toggle */}
