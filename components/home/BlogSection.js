@@ -37,7 +37,10 @@ export default function BlogSection() {
   ];
 
   return (
-    <section className="section-padding bg-black text-white animate-section">
+    <section
+      className="section-padding text-white animate-section bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url('/comingSoon.jpeg.jpg')" }}
+    >
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center mb-12">
           Recent Activity
