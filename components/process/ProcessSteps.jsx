@@ -70,10 +70,14 @@ const ProcessSteps = () => {
             <motion.div
               key={index}
               className="step-container relative mb-24 last:mb-24"
-              initial={{ opacity: 0, y: 32 }}
+              initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
-              viewport={{ once: true, margin: "-100px" }}
+              transition={{
+                duration: 0.8,
+                ease: "easeOut",
+                delay: index * 0.2,
+              }}
+              viewport={{ once: true, amount: 0.3 }}
             >
               <div className="flex flex-col md:flex-row gap-8">
                 {/* Progress Bar Wrapper */}
@@ -95,7 +99,7 @@ const ProcessSteps = () => {
                   </div>
                   <div className="absolute left-8 top-16 w-0.5 h-[calc(100%+6rem)] bg-gray-600">
                     <motion.div
-                      className="w-full bg-[#b0a3ff]"
+                      className="w-full bg-white"
                       initial={{ height: "0%" }}
                       animate={{
                         height: index <= activeStep ? "100%" : "0%",
