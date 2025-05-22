@@ -55,16 +55,11 @@ export default function ProcessHero() {
             gyroControls: false,
             minHeight: 200.0,
             minWidth: 200.0,
-            scale: 1.0,
-            scaleMobile: 1.0,
-            backgroundColor: 0x000000,
-            color1: 0xdf00ff,
-            color2: 0xff42,
-            birdSize: 2.1,
-            wingSpan: 19.0,
-            speedLimit: 4.0,
-            separation: 46.0,
-            alignment: 25.0,
+            baseColor: 0x0,
+            backgroundColor: 0x0,
+            amplitudeFactor: 0.2,
+            xOffset: 0.26,
+            yOffset: -0.01,
           });
         }
       } catch (err) {
