@@ -41,7 +41,7 @@ export default function ContactPage() {
   return (
     <div
       ref={pageRef}
-      className="bg-gradient-to-b from-gray-900 to-[#6B21A8] min-h-screen"
+      className="bg-gradient-to-b from-black via-black to-purple-950 min-h-screen"
     >
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
