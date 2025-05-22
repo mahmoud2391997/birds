@@ -36,7 +36,7 @@ export default function ArticlesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gray-900 text-white">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black text-white">
       <div className="aurora-bg absolute inset-0 z-0 opacity-80 blur-xl"></div>
       <motion.div
         className="relative z-10 text-center px-4"
@@ -46,20 +46,13 @@ export default function ArticlesPage() {
       >
         <motion.h1
           className="text-6xl md:text-8xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#1e3a8a] via-[#a855f7] to-[#3b82f6]"
-          initial={{ y: 50 }}
+          initial={{ y: 60 }}
           animate={{ y: 0 }}
           transition={{ duration: 1, delay: 0.7 }}
         >
-          Coming Soon
+          Lunching Soon...
         </motion.h1>
-        <motion.p
-          className="text-xl md:text-2xl mb-8 text-gray-300"
-          initial={{ y: 30 }}
-          animate={{ y: 0 }}
-          transition={{ duration: 1, delay: 0.9 }}
-        >
-          We’re working hard to bring you something amazing. Stay tuned!
-        </motion.p>
+
         <motion.div
           className="flex justify-center space-x-4"
           initial={{ opacity: 0 }}
