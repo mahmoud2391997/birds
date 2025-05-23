@@ -1,12 +1,13 @@
 "use client";
 
-import { ArrowUp, Calendar, FileCheck } from "lucide-react";
-import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 const ProcessSteps = () => {
-  const [activeStep, setActiveStep] = useState(0);
   const containerRef = useRef(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [visibleSteps, setVisibleSteps] = useState([]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,13 +15,27 @@ const ProcessSteps = () => {
 
       const steps = containerRef.current.querySelectorAll(".step-container");
       const windowHeight = window.innerHeight;
+      const containerTop = containerRef.current.getBoundingClientRect().top;
+
+      const newVisibleSteps = [];
+      let newActiveStep = 0;
 
       steps.forEach((step, index) => {
-        const stepTop = step.getBoundingClientRect().top;
-        if (stepTop < windowHeight * 0.5) {
-          setActiveStep(index);
+        const stepRect = step.getBoundingClientRect();
+
+        // Step is in viewport
+        if (stepRect.top < windowHeight * 0.8) {
+          newVisibleSteps.push(index);
+
+          // Update active step (for progress line)
+          if (stepRect.top < windowHeight * 0.6) {
+            newActiveStep = index;
+          }
         }
       });
+
+      setVisibleSteps(newVisibleSteps);
+      setActiveStep(newActiveStep);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -35,105 +50,102 @@ const ProcessSteps = () => {
       title: "Book a Call",
       description:
         "Choose a date and time to book a discovery session, during which we'll define the project objectives, timeline, and budget.",
-      icon: <Calendar className="h-12 w-12 text-white" />,
     },
     {
       number: "02",
       title: "Receive a Proposal",
       description:
         "We'll send you a bespoke project proposal including deliverables, project roadmap, and a quote in 1-2 business days.",
-      icon: <FileCheck className="h-12 w-12 text-white" />,
     },
     {
       number: "03",
       title: "Kickoff the Project",
       description:
         "Sign the contract, send the deposit, lean back, and let us do our thing. We'll invite you to a design review meeting in 5-7 business days.",
-      icon: <ArrowUp className="h-12 w-12 text-white" />,
     },
   ];
 
   return (
-    <div id="process-steps" className="bg-black py-24 px-4 md:px-6 lg:px-8">
-      <div className="max-w-5xl mx-auto" ref={containerRef}>
-        {/* Heading */}
-        <div className="mb-16 text-center md:text-left">
-          <h2 className="text-4xl md:text-5xl font-bold text-white">
-            The world moves fast, we keep pace. Cut through the noise with{" "}
-            <span className="text-[#b0a3ff]">our process.</span>
-          </h2>
-        </div>
-
-        {/* Timeline Row */}
-        <div className="relative">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              className="step-container relative mb-24 last:mb-24"
-              initial={{ opacity: 0, y: 60 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.8,
-                ease: "easeOut",
-                delay: index * 0.2,
-              }}
-              viewport={{ once: true, amount: 0.3 }}
-            >
-              <div className="flex flex-col md:flex-row gap-8">
-                {/* Progress Bar Wrapper */}
-                <div className="relative flex flex-col items-center">
-                  <div
-                    className={`w-16 h-16 flex items-center justify-center rounded-full border-2 transition-all duration-300 ${
-                      index <= activeStep
-                        ? "bg-black border-[#b0a3ff]"
-                        : "bg-transparent border-gray-600"
-                    }`}
-                  >
-                    <span
-                      className={`text-xl font-bold transition-colors duration-300 ${
-                        index <= activeStep ? "text-white" : "text-gray-500"
-                      }`}
-                    >
-                      {step.number}
-                    </span>
-                  </div>
-                  <div className="absolute left-8 top-16 w-0.5 h-[calc(100%+6rem)] bg-gray-600">
-                    <motion.div
-                      className="w-full bg-white"
-                      initial={{ height: "0%" }}
-                      animate={{
-                        height: index <= activeStep ? "100%" : "0%",
-                      }}
-                      transition={{ duration: 0.8, ease: "easeInOut" }}
-                      style={{ originY: 0 }}
-                    />
-                  </div>
-                </div>
-
-                {/* Content Wrapper */}
-                <motion.div
-                  className="flex-1"
-                  initial={{ opacity: 0, y: 32 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 + index * 0.2 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="flex items-center gap-4 mb-4">
-                    {step.icon}
-                    <h3 className="text-2xl md:text-3xl font-bold text-white">
-                      {step.title}
-                    </h3>
-                  </div>
-                  <p className="text-white text-lg opacity-80 max-w-2xl">
-                    {step.description}
-                  </p>
-                </motion.div>
+    <section id="process" className="w-full bg-black py-16 md:py-24">
+      <div className="mx-auto max-w-7xl px-4 md:px-8">
+        <div className="overflow-hidden rounded-3xl bg-white">
+          <div
+            className="relative flex flex-col lg:flex-row"
+            ref={containerRef}
+          >
+            {/* Content Side */}
+            <div className="w-full lg:w-3/5 p-8 md:p-16 lg:p-20">
+              <div className="mb-16 max-w-2xl">
+                <h2 className="text-4xl md:text-5xl font-bold text-[#0e0e0e] leading-tight">
+                  The world moves fast, we keep pace. Cut through the noise with{" "}
+                  <span className="text-[#b0a3ff]">our process.</span>
+                </h2>
               </div>
-            </motion.div>
-          ))}
+
+              <div className="relative">
+                {steps.map((step, index) => (
+                  <div
+                    key={index}
+                    className="step-container relative mb-24 last:mb-0"
+                  >
+                    <div className="flex">
+                      {/* Number and Line */}
+                      <div className="relative mr-8">
+                        <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white">
+                          <span
+                            className={`text-lg font-medium ${
+                              visibleSteps.includes(index)
+                                ? "text-[#0e0e0e]"
+                                : "text-gray-300 opacity-20"
+                            }`}
+                          >
+                            {step.number}
+                          </span>
+                        </div>
+
+                        {/* Vertical line */}
+                        {index < steps.length - 1 && (
+                          <div className="absolute left-1/2 top-10 bottom-0 w-px h-[calc(100%+1.5rem)] -translate-x-1/2">
+                            <div className="h-full w-full bg-gray-200 opacity-20"></div>
+                            <motion.div
+                              className="absolute top-0 left-0 w-full bg-[#b0a3ff]"
+                              initial={{ height: "0%" }}
+                              animate={{
+                                height: index < activeStep ? "100%" : "0%",
+                              }}
+                              transition={{ duration: 0.8, ease: "easeInOut" }}
+                              style={{ originY: 0 }}
+                            />
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Content */}
+                      <motion.div
+                        className="flex-1"
+                        initial={{ opacity: 0, y: 32 }}
+                        animate={{
+                          opacity: visibleSteps.includes(index) ? 1 : 0,
+                          y: visibleSteps.includes(index) ? 0 : 32,
+                        }}
+                        transition={{ duration: 0.5, delay: 0.1 }}
+                      >
+                        <h3 className="mb-3 text-2xl font-bold text-[#0e0e0e]">
+                          {step.title}
+                        </h3>
+                        <p className="text-[#0e0e0e] text-base opacity-80 max-w-lg">
+                          {step.description}
+                        </p>
+                      </motion.div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 
