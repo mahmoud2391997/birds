@@ -24,11 +24,11 @@ const ProcessSteps = () => {
         const stepRect = step.getBoundingClientRect();
 
         // Step is in viewport
-        if (stepRect.top < windowHeight * 0.8) {
+        if (stepRect.top < windowHeight * 0.9) {
           newVisibleSteps.push(index);
 
           // Update active step (for progress line)
-          if (stepRect.top < windowHeight * 0.6) {
+          if (stepRect.top < windowHeight * 0.8) {
             newActiveStep = index;
           }
         }
@@ -39,7 +39,7 @@ const ProcessSteps = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
+    handleScroll();
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
@@ -91,11 +91,11 @@ const ProcessSteps = () => {
                     <div className="flex">
                       {/* Number and Line */}
                       <div className="relative mr-8">
-                        <div className="relative z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white">
+                        <div className="relative z-10 flex h-10 w-10 items-center justify-center p-3 rounded-full bg-white">
                           <span
-                            className={`text-lg font-medium ${
+                            className={`text-lg p-3 rounded-full font-medium ${
                               visibleSteps.includes(index)
-                                ? "text-[#0e0e0e]"
+                                ? "bg-black text-white"
                                 : "text-gray-300 opacity-20"
                             }`}
                           >

@@ -5,7 +5,7 @@ import FancyButton from "../ui/FancyButton";
 const ProcessCTA = () => {
   return (
     <div>
-      <section className="py-16 md:py-24 bg-gradient-to-t from-[#0373fb] via-[#cb6ce6]/50 to-[#cb6ce6] text-white">
+      <section className="py-16 md:py-24 bg-gradient-to-t from-black via-[#0373fb]/50 to-black text-white">
         <div className="container mx-auto px-4 text-center animate-section">
           <h2 className="text-3xl font-bold mb-6">Ready to Get Started?</h2>
           <p className="text-xl mb-8 max-w-3xl mx-auto">
