@@ -66,7 +66,7 @@ const ProcessSteps = () => {
   ];
 
   return (
-    <section id="process" className="w-full bg-black py-16 md:py-24">
+    <section id="process-steps" className="w-full bg-black py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 md:px-8">
         <div className="overflow-hidden rounded-3xl bg-white">
           <div
