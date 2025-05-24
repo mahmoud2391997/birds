@@ -106,18 +106,18 @@ export default function ServicesSection() {
   };
 
   return (
-    <section className="text-white py-24 px-6 lg:px-12">
+    <section className="text-white py-24 px-6 lg:px-12 bg-gradient-to-b">
       <div className="max-w-7xl mx-auto mt-10 py-12">
         {/* Top Section */}
-        <div className="flex flex-col lg:flex-row items-start gap-10">
+        <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
           {/* Text */}
-          <div className="flex-1">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          <div className="flex-1 max-w-xl lg:max-w-none">
+            <h1 className="text-4xl md:text-5xl font-extrabold mb-6 leading-tight tracking-tight">
               In a crowded marketing world,
               <br />
               one-size-fits-all <br /> doesn’t cut it.
             </h1>
-            <p className="text-gray-300 text-lg leading-relaxed max-w-xl mb-6">
+            <p className="text-gray-300 text-lg leading-relaxed max-w-full mb-8">
               That&apos;s why we offer flexible, tailored solutions to match
               your exact goals. Need the full package? We&apos;re ready with a
               complete, all-in-one strategy that takes your brand higher from
@@ -127,34 +127,41 @@ export default function ServicesSection() {
             <FancyButton
               onClick={handleDownloadBrochure}
               download
-              className="mt-4 bg-gradient-to-r from-[#3b27ff] to-[#6d3eff] text-white font-semibold px-6 py-3 rounded-full hover:scale-105 transition-transform ease-in duration-[3000ms] shadow-lg"
+              className="inline-block bg-gradient-to-r from-[#3b27ff] to-[#6d3eff] text-white font-semibold px-8 py-4 rounded-full hover:scale-105 transition-transform duration-500 shadow-lg"
             >
               Download Brochure
             </FancyButton>
           </div>
 
           {/* Images */}
-          <div className="flex-1 grid grid-cols-2 gap-4">
+          <div className="flex-1 grid grid-cols-2 gap-6 sm:gap-8">
             <Image
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg"
-              width={300}
-              height={200}
+              src="/home1.svg"
+              width={400}
+              height={280}
               alt="Landscape 1"
-              className="w-full h-auto rounded-xl object-cover"
+              className="w-full h-auto rounded-xl object-contain shadow-lg"
+              sizes="(max-width: 640px) 100vw, (min-width: 641px) 50vw"
+              priority
             />
             <Image
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg"
-              width={300}
-              height={200}
+              src="/home2.svg"
+              width={400}
+              height={280}
               alt="Landscape 2"
-              className="w-full h-auto rounded-xl object-cover"
+              className="w-full h-auto object-fill rounded-xl shadow-lg"
+              sizes="(max-width: 640px) 100vw, (min-width: 641px) 50vw"
+              priority
             />
-            <Image
-              src="https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg"
-              width={300}
-              height={200}
+            <video
+              src="/home3.mp4"
+              width={820}
+              height={100}
               alt="Landscape 3"
-              className="w-full h-auto rounded-xl object-cover col-span-2"
+              className="w-full h-96 rounded-xl object-cover col-span-2 shadow-lg"
+              muted
+              loop
+              autoPlay
             />
           </div>
         </div>
