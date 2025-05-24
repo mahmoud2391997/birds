@@ -73,7 +73,12 @@ export default function ServicesSection() {
   };
 
   const handleDownloadBrochure = () => {
-    window.open("/brochure.pdf", "_blank");
+    const link = document.createElement("a");
+    link.href = "/birdsb.pdf";
+    link.download = "";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -94,6 +99,7 @@ export default function ServicesSection() {
             </p>
             <FancyButton
               onClick={handleDownloadBrochure}
+              download
               className="mt-4 bg-gradient-to-r from-[#3b27ff] to-[#6d3eff] text-white font-semibold px-6 py-3 rounded-full hover:scale-105 transition-transform ease-in duration-[3000ms] shadow-lg"
             >
               Download Brochure
