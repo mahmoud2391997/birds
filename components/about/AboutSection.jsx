@@ -16,12 +16,17 @@ export default function AboutSection() {
       {/* Right: Text Content */}
       <div className="max-w-4xl">
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-medium leading-tight text-white tracking-tight">
-          Hi, I'm Connelly — an OKC-based Product & Web Designer. I take on
-          freelance projects in various industries, offering brand, web design,
-          and development.
+          Birds is a marketing and communications agency based in Egypt,
+          partnering with brands worldwide to deliver creative, measurable
+          impact. Creativity isn’t a layer, it’s how we think, perform, and
+          lead. We don’t follow trends. We craft original concepts, custom
+          strategies, and use our own theories to help brands stand out and
+          perform. With a team of sharp marketing strategies and creatives, we
+          turn distinctive ideas into results. Your brand doesn’t just grow, it
+          evolves with purpose.
         </h1>
         <p className="text-lg mt-6 text-white">
-          Currently working as Director of UX at{" "}
+          The sky isn’t the limit. It’s the beginning. See you up there.
           <span className="font-semibold">GiANT</span>.
         </p>
       </div>

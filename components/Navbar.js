@@ -87,17 +87,18 @@ export default function Navbar() {
             <motion.div key={link.name} variants={itemVariants}>
               <Link
                 href={link.href}
-                className="text-sm text-white hover:text-[#7ed957] font-medium transition duration-200"
+                className="text-sm text-white hover:text-prime font-medium transition duration-200"
               >
                 {link.name}
               </Link>
             </motion.div>
           ))}
         </motion.div>
-        {/* Book Call Button */}
         <div className="hidden md:flex ml-4">
           <Link
-            href="/book"
+            href="https://calendly.com/nourabbas-birds-marketingag/30min?month=2025-05"
+            target="_blank"
+            rel="noopener noreferrer"
             className="bg-[#1f1f1f] border border-white text-white hover:bg-white hover:text-black px-4 py-2 rounded-full text-sm font-semibold transition duration-300"
           >
             + Schedule a meeting

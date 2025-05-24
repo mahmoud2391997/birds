@@ -44,7 +44,7 @@ export default function ServiceCard({ service, index }) {
           ))}
         </ul>
         <Link
-          href={`/services/${service.id}`}
+          href={`/contact`}
           className="inline-flex items-center text-[#0373fb] font-medium hover:text-[#0d60fa] transition-colors"
         >
           Learn More <ArrowRight className="ml-2 h-4 w-4" />

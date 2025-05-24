@@ -100,8 +100,7 @@ export default function ProcessHero() {
         </h1>
 
         <p className="hero-subtitle text-lg md:text-xl text-white/90 mb-8 max-w-3xl mx-auto">
-          The World Moves Fast but So Are We. Let's work together — this is our
-          process. See You Up There!
+          The World Moves Fast but So Are We. Join Us Today, See You Up There!
         </p>
 
         {/* Optional Fancy Button */}

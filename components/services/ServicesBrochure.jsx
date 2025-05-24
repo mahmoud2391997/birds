@@ -13,7 +13,8 @@ export default function ServicesBrochure() {
           in our comprehensive brochure.
         </p>
         <a
-          href="/brochure.pdf"
+          download
+          href="/birdsb.pdf"
           target="_blank"
           className="inline-flex items-center bg-[#0373fb] text-white font-medium py-3 px-8 rounded-lg hover:bg-[#0d60fa] transition-colors"
           rel="noreferrer"

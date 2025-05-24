@@ -3,8 +3,14 @@ import { motion } from "framer-motion";
 
 export default function ServicesHero() {
   return (
-    <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden text-white">
-      <div className="aurora-bg"></div>
+    <section
+      className="relative min-h-[100vh] flex items-center justify-center overflow-hidden text-white"
+      style={{
+        backgroundImage: 'url("/serviceshero.svg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className="container mx-auto px-4 z-10 text-center">
         <motion.h1
           className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6"

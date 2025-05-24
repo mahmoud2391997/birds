@@ -1,10 +1,10 @@
 import React from "react";
 import { services } from "./ServicesData";
-import ServiceCard from "./Servicesard";
+import Serviceard from "./Servicesard"; // <-- Fixed typo
 
 export default function ServicesOverview() {
   return (
-    <section className="py-16 md:py-24 text-white bg-gray-900">
+    <section className="py-16 md:py-24 text-white">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16 animate-section">
           <h2 className="text-3xl font-bold mb-4">
@@ -20,7 +20,7 @@ export default function ServicesOverview() {
 
         <div className="space-y-24 animate-section">
           {services.map((service, index) => (
-            <ServiceCard key={service.id} service={service} index={index} />
+            <Serviceard key={service.id} service={service} index={index} />
           ))}
         </div>
       </div>

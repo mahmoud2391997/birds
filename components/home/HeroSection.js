@@ -63,8 +63,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
         >
-          Elevating brands through powerful marketing, communications, and
-          creative excellence.
+          Empowering Brands to Soar with Strategic Marketing, Communications,
+          and Creative Excellence.
         </motion.h1>
 
         <motion.p
@@ -73,8 +73,8 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          We build and elevate brands through expert communications, strategic
-          planning, creative solutions, and measurable results.
+          From strategy to storytelling, we elevate your brand and help it land
+          with the audience that matters most.
         </motion.p>
 
         <motion.div

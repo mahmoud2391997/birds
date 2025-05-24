@@ -60,7 +60,7 @@ export default function AboutHeroSection() {
   return (
     <div className="flex flex-col items-center">
       {/* Hero Text */}
-      <section className="min-h-[50vh] sm:min-h-[70vh] flex flex-col justify-center items-center text-center w-full max-w-6xl px-4 mt-16">
+      <section className="min-h-[50vh] sm:min-h-[70vh] flex flex-col justify-center items-center text-center w-full max-w-6xl px-4 mt-32 mb-8">
         <div
           className="text-left w-full"
           style={{ fontFamily: "Inter, sans-serif" }}
@@ -71,7 +71,7 @@ export default function AboutHeroSection() {
               letterSpacing: "-0.07em",
             }}
           >
-            A great marketer
+            Based in Egypt,
           </p>
           <p
             className="text-4xl sm:text-7xl md:text-[166.5px] font-medium leading-[0.8em] text-white"
@@ -79,7 +79,7 @@ export default function AboutHeroSection() {
               letterSpacing: "-0.07em",
             }}
           >
-            based in OKC
+            Partnering with Brands World Wide
           </p>
         </div>
         <h1
@@ -102,7 +102,7 @@ export default function AboutHeroSection() {
         >
           <div ref={imageWrapperRef}>
             <Image
-              src="https://framerusercontent.com/images/iegHqOswEtseSPFb7hqb2HM3loE.jpg"
+              src="/about.svg"
               alt="Team Member"
               width={540}
               height={720}

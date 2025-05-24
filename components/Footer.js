@@ -100,16 +100,16 @@ export default function Footer() {
               <li className="flex items-center">
                 <Phone size={18} className="mr-2 text-[#7ed957]" />
                 <a
-                  href="tel:+1234567890"
+                  href="tel:+20 155635421"
                   className="text-gray-300 hover:text-[#7ed957] transition-colors"
                 >
-                  +1 (234) 567-890
+                  +20 155635421
                 </a>
               </li>
               <li className="flex items-start">
                 <MapPin size={18} className="mr-2 mt-1 text-[#7ed957]" />
                 <span className="text-gray-300">
-                  123 Marketing Street, Creative District, Design City
+                  643, Touristic District A, October Gardens, Giza, Egypt
                 </span>
               </li>
             </ul>
@@ -151,7 +151,7 @@ export default function Footer() {
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="px-4 py-2 w-full rounded-l-lg focus:outline-none text-black"
+                  className="px-4 py-2 w-full rounded-l-lg focus:outline-none text-white border border-gray-700 bg-gray-800 placeholder-gray-500 focus:ring-2 focus:transparent transition-colors"
                 />
                 <button className="bg-[#0373fb] hover:bg-[#0d60fa] px-4 py-2 rounded-r-lg transition-colors">
                   Subscribe
