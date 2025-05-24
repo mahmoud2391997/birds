@@ -6,7 +6,7 @@ export default function ServicesHero() {
     <section
       className="relative min-h-[100vh] flex items-center justify-center overflow-hidden text-white"
       style={{
-        backgroundImage: 'url("/serviceshero.svg")',
+        backgroundImage: 'url("/servhero.svg")',
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
