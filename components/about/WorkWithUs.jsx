@@ -14,7 +14,7 @@ const WorkWithUs = () => {
           href="mailto:hello@emptyshelf.design"
           className="inline-block mt-4 text-xl md:text-2xl font-medium border-2 border-white rounded-full px-6 py-2 hover:bg-white hover:text-black transition-colors"
         >
-          hello@emptyshelf.design
+          Info@birds-marketingag.com
         </a>
       </section>
     </div>
