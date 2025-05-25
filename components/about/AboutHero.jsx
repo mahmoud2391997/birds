@@ -17,59 +17,56 @@ export default function AboutHeroSection() {
 
     if (!imageWrapper || !imageContainer) return;
 
-    // Set initial scale for image
-    gsap.set(imageWrapper, { scale: window.innerWidth < 640 ? 1.2 : 1.5 });
+    // Set initial scale and position for image
+    gsap.set(imageWrapper, { scale: 1.3, y: 0 });
 
     // Pinning animation for the image container
-    const pinTimeline = gsap.to(imageContainer, {
+    gsap.to(imageContainer, {
       scrollTrigger: {
         trigger: imageContainer,
-        start: "top 80%", // Adjusted for better mobile trigger
-        end: window.innerWidth < 640 ? "+=50%" : "+=70%", // Shorter duration on mobile
+        start: "top 90%", // Start earlier to allow overlap with hero text
+        end: "+=50%", // Shorter pin duration to focus on overlap
         pin: true,
         scrub: 0.5,
+        onEnter: () => {
+          imageContainer.style.zIndex = "20"; // Higher z-index to appear above text
+        },
+        onLeave: () => {
+          imageContainer.style.zIndex = "0";
+        },
+        onEnterBack: () => {
+          imageContainer.style.zIndex = "20";
+        },
       },
     });
 
-    // Image parallax and scale animation
-    const parallaxTimeline = gsap.to(imageWrapper, {
+    // Image parallax and scale animation to move over hero text
+    gsap.to(imageWrapper, {
       scrollTrigger: {
         trigger: imageContainer,
-        start: "top 70%",
-        end: "top 10%",
-        scrub: 0.3, // Slightly smoother scrub
+        start: "top 90%", // Start earlier to align with pinning
+        end: "top 10%", // End when image reaches hero text
+        scrub: 0.3,
       },
-      y: window.innerWidth < 640 ? "-50%" : "-100%", // Reduced parallax on mobile
-      scale: 1,
+      y: "-150%", // Move up significantly to overlap hero text
+      scale: 1, // Scale down to normal size
       ease: "power1.inOut",
     });
 
-    // Handle resize to refresh ScrollTrigger
-    const handleResize = () => {
-      ScrollTrigger.refresh();
-    };
-
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup on unmount
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      pinTimeline.kill();
-      parallaxTimeline.kill();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
+    // Refresh ScrollTrigger on window resize
+    ScrollTrigger.refresh();
   }, []);
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center relative">
       {/* Hero Text */}
-      <section className="min-h-[40vh] sm:min-h-[50vh] lg:min-h-[60vh] flex flex-col justify-center items-center text-center w-full max-w-[90vw] sm:max-w-4xl lg:max-w-6xl px-4 sm:px-6 lg:px-8 mt-16 sm:mt-20 lg:mt-24 mb-8 sm:mb-12">
+      <section className="min-h-[40vh] sm:min-h-[60vh] flex flex-col justify-center items-center text-center w-full max-w-5xl px-4 mt-16 sm:mt-20 mb-8">
         <div
           className="text-left w-full"
           style={{ fontFamily: "Inter, sans-serif" }}
         >
           <p
-            className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-medium leading-tight text-white"
+            className="text-3xl sm:text-5xl md:text-7xl lg:text-[120px] font-medium leading-[1.1em] text-white"
             style={{
               letterSpacing: "-0.05em",
             }}
@@ -77,7 +74,7 @@ export default function AboutHeroSection() {
             Based in Egypt,
           </p>
           <p
-            className="text-3xl sm:text-5xl md:text-7xl lg:text-8xl font-medium leading-tight text-white"
+            className="text-3xl sm:text-5xl md:text-7xl lg:text-[120px] font-medium leading-[1.1em] text-white"
             style={{
               letterSpacing: "-0.05em",
             }}
@@ -85,21 +82,31 @@ export default function AboutHeroSection() {
             Partnering with Brands World Wide
           </p>
         </div>
+        <h1
+          className="mt-4 sm:mt-6 text-base sm:text-xl md:text-2xl font-medium leading-relaxed text-black"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          (And by small, we mean tiny)
+        </h1>
       </section>
 
       {/* Image Section */}
-      <section className="min-h-[30vh] sm:min-h-[40vh] lg:min-h-[50vh] flex justify-center items-center mt-12 sm:mt-16 lg:mt-20">
+      <section className="min-h-[40vh] sm:min-h-[50vh] flex justify-center items-center mt-12 sm:mt-16">
         <div
           ref={containerRef}
-          className="image-container w-full max-w-[90vw] sm:max-w-[400px] lg:max-w-[500px]"
+          className="image-container"
+          style={{ width: "100%", maxWidth: "500px" }}
         >
-          <div ref={imageWrapperRef} className="relative w-full aspect-[3/4]">
+          <div ref={imageWrapperRef}>
             <Image
               src="/about.svg"
               alt="Team Member"
-              fill
-              sizes="(max-width: 640px) 90vw, (max-width: 1024px) 400px, 500px"
-              className="rounded-lg shadow-lg"
+              width={440}
+              height={200}
+              className="w-full h-auto rounded-lg shadow-lg"
               style={{ objectFit: "cover", objectPosition: "left center" }}
               priority
             />
@@ -108,7 +115,7 @@ export default function AboutHeroSection() {
       </section>
 
       {/* Spacer for scroll breathing room */}
-      <section className="h-[8vh] sm:h-[10vh] lg:h-[12vh]" />
+      <section className="h-[8vh] sm:h-[12vh]" />
     </div>
   );
 }
