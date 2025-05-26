@@ -45,12 +45,12 @@ export default function ArticlesPage() {
         transition={{ duration: 1, delay: 0.5 }}
       >
         <motion.h1
-          className="text-6xl md:text-8xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#1e3a8a] via-[#a855f7] to-[#3b82f6]"
+          className="inline-block text-6xl md:text-8xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#1e3a8a] via-[#a855f7] to-[#3b82f6] leading-[1.2] overflow-visible"
           initial={{ y: 60 }}
           animate={{ y: 0 }}
           transition={{ duration: 1, delay: 0.7 }}
         >
-          Lunching Soon...
+          Launching Soon...
         </motion.h1>
 
         <motion.div
