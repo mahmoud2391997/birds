@@ -79,6 +79,29 @@ const cardData = [
     ],
   },
 ];
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const name = form[0].value;
+  const industry = form[1].value;
+  const email = form[2].value;
+
+  const res = await fetch("/api/contact", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, industry, email }),
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    alert("Message sent successfully!");
+    form.reset();
+  } else {
+    alert("Something went wrong. Please try again.");
+  }
+};
 
 export default function ServicesSection() {
   const [showForm, setShowForm] = useState(false);
@@ -215,7 +238,7 @@ export default function ServicesSection() {
               animate={{ opacity: 1, height: "auto" }}
               transition={{ duration: 0.3 }}
             >
-              <form className="space-y-4 text-gray-300">
+              <form onSubmit={handleSubmit} className="space-y-4 text-gray-300">
                 <input
                   type="text"
                   placeholder="Name"
