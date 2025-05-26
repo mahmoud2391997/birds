@@ -10,6 +10,30 @@ import FancyButton from "@/components/ui/FancyButton";
 export default function ContactPage() {
   const pageRef = useRef(null);
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Handle form submission logic here
+    console.log("Form submitted");
+    const res = await fetch("/api/contact", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: e.target.name.value,
+        title: e.target.title.value,
+        email: e.target.email.value,
+        company: e.target.company.value,
+        mau: e.target.mau.value,
+      }),
+    });
+    const data = await res.json();
+    if (!res.ok) {
+      console.error("tezy");
+      alert("Something went wrong. Please try again.");
+    } else {
+      alert("Message sent successfully!");
+      e.target.reset();
+    }
+  };
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
 
@@ -179,7 +203,7 @@ export default function ContactPage() {
             </div>
 
             <div>
-              <form className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label
