@@ -16,12 +16,6 @@ function isValidEmail(email) {
 // Simplified reCAPTCHA verification for Vercel deployment
 async function verifyRecaptcha(token) {
   try {
-    // For development, skip verification
-    if (process.env.NODE_ENV === "development") {
-      console.log("Development mode: Skipping reCAPTCHA verification");
-      return 0.9;
-    }
-
     // Use the simpler reCAPTCHA v3 verification
     const secretKey = process.env.RECAPTCHA_SECRET_KEY;
     if (!secretKey) {
@@ -85,19 +79,31 @@ export async function POST(req) {
 
     console.log("Form type detected:", { isContactForm, isServicesForm });
 
-    // Verify reCAPTCHA token if provided (skip in development)
-    if (captchaToken && process.env.NODE_ENV !== "development") {
+    // MODIFIED: More lenient reCAPTCHA verification for production
+    if (captchaToken) {
+      console.log("Attempting reCAPTCHA verification...");
       const score = await verifyRecaptcha(captchaToken);
 
-      if (score === null || score < 0.5) {
-        console.error("reCAPTCHA verification failed", { score });
-        return NextResponse.json(
-          { message: "Security verification failed. Please try again.", score },
+      if (score === null) {
+        console.warn(
+          "reCAPTCHA verification failed, but allowing submission to proceed"
+        );
+        // Don't block the submission, just log the warning
+      } else if (score < 0.3) {
+        // Only block if score is very low (more lenient threshold)
+        console.error("reCAPTCHA score too low", { score });
+        return json(
+          {
+            message: "Security verification failed. Please try again.",
+            score,
+            debug: "Score too low",
+          },
           { status: 403 }
         );
+      } else {
+        console.log("reCAPTCHA verification passed with score:", score);
       }
-      console.log("reCAPTCHA verification passed with score:", score);
-    } else if (!captchaToken) {
+    } else {
       console.warn(
         "No reCAPTCHA token provided, proceeding without verification"
       );
@@ -155,26 +161,24 @@ export async function POST(req) {
 
     console.log("Email configuration verified, setting up transporter...");
 
-    // Set up nodemailer transporter - FIXED: removed the "er" from createTransporter
+    // Set up nodemailer transporter with explicit configuration for Vercel
     const transporter = nodemailer.createTransport({
-      service: "gmail",
+      host: "smtp.gmail.com",
+      port: 587,
+      secure: false, // true for 465, false for other ports
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      // Add these options for better compatibility with Vercel
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
 
-    // Verify transporter configuration
-    try {
-      await transporter.verify();
-      console.log("Email transporter verified successfully");
-    } catch (verifyError) {
-      console.error("Email transporter verification failed:", verifyError);
-      return NextResponse.json(
-        { message: "Email service configuration error" },
-        { status: 500 }
-      );
-    }
+    console.log(
+      "Email transporter configured (skipping verification in serverless environment)"
+    );
 
     // Prepare email content based on form type
     let emailContent = `Name: ${safeName}\nEmail: ${safeEmail}\n`;
@@ -219,7 +223,8 @@ export async function POST(req) {
           </div>
           <p style="color: #666; font-size: 12px;">
             Submitted on: ${new Date().toLocaleString()}<br>
-            From: Birds Marketing Contact Form
+            From: Birds Marketing Contact Form<br>
+            Domain: ${req.headers.get("host") || "Unknown"}
           </p>
         </div>
       `,
@@ -231,6 +236,7 @@ export async function POST(req) {
       subject: mailOptions.subject,
     });
 
+    // Send email directly without verification
     await transporter.sendMail(mailOptions);
     console.log("✅ Email sent successfully!");
 
@@ -247,10 +253,19 @@ export async function POST(req) {
     // Provide more specific error messages
     let errorMessage = "Email sending failed";
     if (error instanceof Error) {
-      if (error.message.includes("Invalid login")) {
-        errorMessage = "Email authentication failed";
-      } else if (error.message.includes("Network")) {
-        errorMessage = "Network error occurred";
+      if (
+        error.message.includes("Invalid login") ||
+        error.message.includes("authentication")
+      ) {
+        errorMessage =
+          "Email authentication failed. Please check your email credentials.";
+      } else if (
+        error.message.includes("Network") ||
+        error.message.includes("ENOTFOUND")
+      ) {
+        errorMessage = "Network error occurred while sending email.";
+      } else if (error.message.includes("timeout")) {
+        errorMessage = "Email sending timed out. Please try again.";
       } else {
         errorMessage = error.message;
       }

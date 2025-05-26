@@ -115,6 +115,7 @@ export default function ContactPage() {
             setRecaptchaLoaded(true);
           } else {
             console.error("reCAPTCHA failed to initialize");
+            // Still allow form submission without reCAPTCHA
             setRecaptchaLoaded(false);
           }
         }, 2000);
@@ -199,7 +200,7 @@ export default function ContactPage() {
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white">Contact us</h2>
               <p className="text-gray-300 mb-8">
-                Get in touch – we&apos;re here to help!
+                Get in touch – we're here to help!
               </p>
 
               <div className="space-y-6">
@@ -254,6 +255,9 @@ export default function ContactPage() {
                       : "Loading security verification..."}
                   </span>
                 </div>
+                <p className="text-xs text-gray-400 mt-2">
+                  Form will work even if security verification fails to load
+                </p>
               </div>
             </div>
 
