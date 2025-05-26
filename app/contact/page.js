@@ -1,42 +1,134 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import Script from "next/script";
 import { motion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Mail, Phone, MapPin, Send } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import FancyButton from "@/components/ui/FancyButton";
 
 export default function ContactPage() {
   const pageRef = useRef(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [recaptchaLoaded, setRecaptchaLoaded] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted");
-    const res = await fetch("/api/contact", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
+    setIsSubmitting(true);
+    setSubmitStatus({ type: null, message: "" });
+
+    try {
+      let token = null;
+
+      // Only try to get reCAPTCHA token if it's properly loaded
+      if (
+        recaptchaLoaded &&
+        window.grecaptcha &&
+        typeof window.grecaptcha.execute === "function"
+      ) {
+        try {
+          console.log("Attempting to generate reCAPTCHA token...");
+          token = await window.grecaptcha.execute(
+            process.env.NEXT_PUBLIC_SITE_KEY,
+            {
+              action: "submit",
+            }
+          );
+          console.log("reCAPTCHA token generated successfully");
+        } catch (recaptchaError) {
+          console.warn("reCAPTCHA token generation failed:", recaptchaError);
+          // Continue without token - the server will handle this gracefully
+        }
+      } else {
+        console.warn("reCAPTCHA not ready, submitting without token");
+      }
+
+      // Prepare form data
+      const formData = {
         name: e.target.name.value,
         title: e.target.title.value,
         email: e.target.email.value,
         company: e.target.company.value,
         mau: e.target.mau.value,
-      }),
-    });
-    const data = await res.json();
-    if (!res.ok) {
-      console.error("tezy");
-      alert("Something went wrong. Please try again.");
-    } else {
-      alert("Message sent successfully!");
+        captchaToken: token,
+      };
+
+      console.log("Submitting form data:", {
+        ...formData,
+        captchaToken: token ? "present" : "missing",
+      });
+
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      console.log("Response:", data);
+
+      if (!res.ok) {
+        throw new Error(data.message || `HTTP error! status: ${res.status}`);
+      }
+
+      setSubmitStatus({
+        type: "success",
+        message: "Message sent successfully! We'll get back to you soon.",
+      });
       e.target.reset();
+    } catch (error) {
+      console.error("Form submission error:", error);
+      setSubmitStatus({
+        type: "error",
+        message: `Failed to send message: ${error.message}`,
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
+  // Handle reCAPTCHA script loading
+  const handleRecaptchaLoad = () => {
+    console.log("reCAPTCHA script loaded");
+
+    // Wait a bit for reCAPTCHA to fully initialize
+    setTimeout(() => {
+      if (
+        window.grecaptcha &&
+        typeof window.grecaptcha.execute === "function"
+      ) {
+        console.log("reCAPTCHA is ready");
+        setRecaptchaLoaded(true);
+      } else {
+        console.warn("reCAPTCHA not properly initialized");
+        // Try again after a longer delay
+        setTimeout(() => {
+          if (
+            window.grecaptcha &&
+            typeof window.grecaptcha.execute === "function"
+          ) {
+            console.log("reCAPTCHA is ready (second attempt)");
+            setRecaptchaLoaded(true);
+          } else {
+            console.error("reCAPTCHA failed to initialize");
+            setRecaptchaLoaded(false);
+          }
+        }, 2000);
+      }
+    }, 1000);
+  };
+
+  const handleRecaptchaError = (e) => {
+    console.error("Failed to load reCAPTCHA script:", e);
+    setRecaptchaLoaded(false);
+  };
+
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
-
     const sections = gsap.utils.toArray(".animate-section");
 
     sections.forEach((section) => {
@@ -67,6 +159,14 @@ export default function ContactPage() {
       ref={pageRef}
       className="bg-gradient-to-b from-black via-black to-purple-950 min-h-screen"
     >
+      {/* Load reCAPTCHA v3 script */}
+      <Script
+        src={`https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_SITE_KEY}`}
+        strategy="afterInteractive"
+        onLoad={handleRecaptchaLoad}
+        onError={handleRecaptchaError}
+      />
+
       {/* Hero Section */}
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         <div className="aurora-bg"></div>
@@ -95,10 +195,11 @@ export default function ContactPage() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 gap-12 animate-section">
+            {/* Contact Info (left side) */}
             <div>
               <h2 className="text-3xl font-bold mb-6 text-white">Contact us</h2>
               <p className="text-gray-300 mb-8">
-                Get in touch – we’re here to help!
+                Get in touch – we&apos;re here to help!
               </p>
 
               <div className="space-y-6">
@@ -139,70 +240,38 @@ export default function ContactPage() {
                 </div>
               </div>
 
-              <div className="mt-8">
-                <h3 className="font-bold mb-4 text-white">Follow Us</h3>
-                <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-white hover:text-[#6B21A8] transition-colors"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-white hover:text-[#6B21A8] transition-colors"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-white hover:text-[#6B21A8] transition-colors"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
-                    </svg>
-                  </a>
-                  <a
-                    href="#"
-                    className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 hover:bg-white hover:text-[#6B21A8] transition-colors"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="20"
-                      height="20"
-                      fill="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z" />
-                    </svg>
-                  </a>
+              {/* reCAPTCHA Status Indicator */}
+              <div className="mt-8 p-4 rounded-lg bg-white/10">
+                <div className="flex items-center space-x-2">
+                  <div
+                    className={`w-3 h-3 rounded-full ${
+                      recaptchaLoaded ? "bg-green-500" : "bg-yellow-500"
+                    }`}
+                  ></div>
+                  <span className="text-sm text-gray-300">
+                    {recaptchaLoaded
+                      ? "Security verification ready"
+                      : "Loading security verification..."}
+                  </span>
                 </div>
               </div>
             </div>
 
+            {/* Contact Form (right side) */}
             <div>
+              {/* Status Message */}
+              {submitStatus.type && (
+                <div
+                  className={`mb-6 p-4 rounded-lg ${
+                    submitStatus.type === "success"
+                      ? "bg-green-500/20 border border-green-500/50 text-green-300"
+                      : "bg-red-500/20 border border-red-500/50 text-red-300"
+                  }`}
+                >
+                  {submitStatus.message}
+                </div>
+              )}
+
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -210,14 +279,16 @@ export default function ContactPage() {
                       htmlFor="name"
                       className="block text-sm font-medium text-white mb-2"
                     >
-                      Your name
+                      Your name *
                     </label>
                     <input
                       type="text"
                       id="name"
+                      name="name"
                       className="w-full px-4 py-3 rounded-xl bg-[#8B5CF6]/70 border-none text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
                       placeholder="Your name"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                   <div>
@@ -225,14 +296,16 @@ export default function ContactPage() {
                       htmlFor="title"
                       className="block text-sm font-medium text-white mb-2"
                     >
-                      Your title
+                      Your title *
                     </label>
                     <input
                       type="text"
                       id="title"
+                      name="title"
                       className="w-full px-4 py-3 rounded-xl bg-[#8B5CF6]/70 border-none text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
                       placeholder="Your title"
                       required
+                      disabled={isSubmitting}
                     />
                   </div>
                 </div>
@@ -242,14 +315,16 @@ export default function ContactPage() {
                     htmlFor="email"
                     className="block text-sm font-medium text-white mb-2"
                   >
-                    Work email
+                    Work email *
                   </label>
                   <input
                     type="email"
                     id="email"
+                    name="email"
                     className="w-full px-4 py-3 rounded-xl bg-[#8B5CF6]/70 border-none text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
                     placeholder="Work email"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -258,14 +333,16 @@ export default function ContactPage() {
                     htmlFor="company"
                     className="block text-sm font-medium text-white mb-2"
                   >
-                    Company name
+                    Company name *
                   </label>
                   <input
                     type="text"
                     id="company"
+                    name="company"
                     className="w-full px-4 py-3 rounded-xl bg-[#8B5CF6]/70 border-none text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
                     placeholder="Company name"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
@@ -274,18 +351,53 @@ export default function ContactPage() {
                     htmlFor="mau"
                     className="block text-sm font-medium text-white mb-2"
                   >
-                    MAU in the US
+                    MAU in the US *
                   </label>
                   <input
                     type="text"
                     id="mau"
+                    name="mau"
                     className="w-full px-4 py-3 rounded-xl bg-[#8B5CF6]/70 border-none text-white placeholder-gray-300 focus:outline-none focus:ring-2 focus:ring-white"
-                    placeholder="MAU in the US"
+                    placeholder="Monthly Active Users in the US"
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
-                <FancyButton type="submit">Contact us</FancyButton>
+                <div className="pt-4">
+                  <FancyButton
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-full"
+                  >
+                    {isSubmitting ? (
+                      <div className="flex items-center justify-center space-x-2">
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        <span>Sending...</span>
+                      </div>
+                    ) : (
+                      "Send Message"
+                    )}
+                  </FancyButton>
+                </div>
+
+                <p className="text-xs text-gray-400 text-center">
+                  This site is protected by reCAPTCHA and the Google{" "}
+                  <a
+                    href="https://policies.google.com/privacy"
+                    className="underline"
+                  >
+                    Privacy Policy
+                  </a>{" "}
+                  and{" "}
+                  <a
+                    href="https://policies.google.com/terms"
+                    className="underline"
+                  >
+                    Terms of Service
+                  </a>{" "}
+                  apply.
+                </p>
               </form>
             </div>
           </div>
@@ -311,6 +423,7 @@ export default function ContactPage() {
         </div>
       </section>
 
+      {/* Background Style */}
       <style jsx global>{`
         .aurora-bg {
           position: absolute;
