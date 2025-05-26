@@ -242,7 +242,7 @@ export default function ContactPage() {
               </div>
 
               {/* reCAPTCHA Status Indicator */}
-              <div className="mt-8 p-4 rounded-lg bg-white/10">
+              {/* <div className="mt-8 p-4 rounded-lg bg-white/10">
                 <div className="flex items-center space-x-2">
                   <div
                     className={`w-3 h-3 rounded-full ${
@@ -258,7 +258,7 @@ export default function ContactPage() {
                 <p className="text-xs text-gray-400 mt-2">
                   Form will work even if security verification fails to load
                 </p>
-              </div>
+              </div> */}
             </div>
 
             {/* Contact Form (right side) */}
