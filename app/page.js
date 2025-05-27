@@ -20,7 +20,7 @@ export default function Home() {
     sections.forEach((section) => {
       gsap.fromTo(
         section,
-        { y: 50, opacity: 0 },
+        { y: 50, opacity: 0, willChange: "transform, opacity" },
         {
           y: 0,
           opacity: 1,
@@ -30,6 +30,8 @@ export default function Home() {
             start: "top 80%",
             end: "bottom 20%",
             toggleActions: "play none none reverse",
+            scrub: false, // Disable scrub for performance
+            fastScrollEnd: true, // End animation quickly on fast scrolls
           },
         }
       );

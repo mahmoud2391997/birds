@@ -11,6 +11,7 @@
   "dependencies": {
     "@radix-ui/themes": "^3.2.1",
     "@reduxjs/toolkit": "^2.8.1",
+    "@vercel/blob": "^1.1.1",
     "autoprefixer": "^10.4.21",
     "daisyui": "^5.0.35",
     "framer-motion": "^12.10.5",

@@ -181,7 +181,8 @@ export default function ServicesSection() {
                 alt="Landscape 1"
                 className="w-full h-auto rounded-xl object-contain shadow-lg"
                 sizes="(max-width: 640px) 100vw, (min-width: 641px) 50vw"
-                priority
+                priority={false}
+                loading="lazy"
               />
               <Image
                 src="/home2.svg"
@@ -190,7 +191,8 @@ export default function ServicesSection() {
                 alt="Landscape 2"
                 className="w-full h-auto object-fill rounded-xl shadow-lg"
                 sizes="(max-width: 640px) 100vw, (min-width: 641px) 50vw"
-                priority
+                priority={false}
+                loading="lazy"
               />
               <video
                 src="/home3.mp4"

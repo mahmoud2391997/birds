@@ -1,0 +1,13 @@
+{
+  "headers": [
+    {
+      "source": "/(.*)\\.webm",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "video/webm"
+        }
+      ]
+    }
+  ]
+}
