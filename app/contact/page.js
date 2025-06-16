@@ -225,7 +225,7 @@ export default function ContactPage() {
                       href="tel:+1234567890"
                       className="text-gray-300 hover:text-white transition-colors"
                     >
-                      +1 (234) 567-890
+                      +20 155635421
                     </a>
                   </div>
                 </div>
@@ -235,7 +235,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-bold mb-1 text-white">Address</h3>
                     <p className="text-gray-300">
-                      123 Marketing Street, Creative District, Design City
+                      643, Touristic District A, October Gardens, Giza, Egypt{" "}
                     </p>
                   </div>
                 </div>

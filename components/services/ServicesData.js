@@ -10,7 +10,7 @@ export const services = [
       "Execution & Follow-Up: We bring your brand to life and stay on course",
       "Evaluation: Continuous tracking, optimization, and elevating",
     ],
-    image: "/images/full-marketing.jpg",
+    image: "/services/9.svg",
   },
   {
     id: "2",
@@ -23,7 +23,7 @@ export const services = [
       "Email & SMS Marketing: Keep your audience engaged and informed",
       "Video Content: Short, impactful videos to stand out",
     ],
-    image: "/images/digital-marketing.jpg",
+    image: "/services/10.svg",
   },
   {
     id: "3",
@@ -35,7 +35,7 @@ export const services = [
       "UX Designs: Engaging, brand-driven website user experiences",
       "Canva Design Templates: On-brand, easy-to-edit creative kits",
     ],
-    image: "/images/graphic-design.jpg",
+    image: "/services/11.svg",
   },
   {
     id: "4",
@@ -46,7 +46,7 @@ export const services = [
       "Creative Campaigns: Spark conversations and make waves",
       "UGC Videos: Real, relatable content that builds trust",
     ],
-    image: "/images/creative-campaigns.jpg",
+    image: "/services/12.svg",
   },
   {
     id: "5",
@@ -57,7 +57,7 @@ export const services = [
       "Targeted social media and Google advertising",
       "Optimized for clicks, conversions, and ROI",
     ],
-    image: "/images/media-buying.jpg",
+    image: "/services/13.svg",
   },
   {
     id: "6",
@@ -68,7 +68,7 @@ export const services = [
       "Reputation management",
       "Strategic messaging that travels far and wide",
     ],
-    image: "/images/pr-communications.jpg",
+    image: "/services/14.svg",
   },
   {
     id: "7",
@@ -83,7 +83,7 @@ export const services = [
       "Catalogs & Booklets",
       "Packaging & Custom Prints",
     ],
-    image: "/images/printing-house.jpg",
+    image: "/services/15.svg",
   },
   {
     id: "8",
@@ -95,6 +95,6 @@ export const services = [
       "Company profiles & portfolios",
       "Custom design and development",
     ],
-    image: "/images/web-design.jpg",
+    image: "/services/16.svg",
   },
 ];

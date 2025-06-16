@@ -81,7 +81,6 @@ const ProcessSteps = () => {
                   <span className="text-[#b0a3ff]">our process.</span>
                 </h2>
               </div>
-
               <div className="relative">
                 {steps.map((step, index) => (
                   <div
@@ -140,6 +139,18 @@ const ProcessSteps = () => {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+            <div className="hidden lg:block w-full lg:w-2/5 relative">
+              <div className="h-full w-full relative">
+                <Image
+                  src="/process-side.jpg"
+                  alt="Process Illustration"
+                  layout="fill"
+                  objectFit="cover"
+                  className="rounded-r-3xl"
+                  priority
+                />
               </div>
             </div>
           </div>
