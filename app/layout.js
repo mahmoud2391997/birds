@@ -11,6 +11,9 @@ export const metadata = {
   description:
     "Elevating brands through powerful marketing, communications, and creative excellence.",
   generator: "v0.dev",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }) {
