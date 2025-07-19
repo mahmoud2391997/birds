@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import LayoutWrapper from "./LayoutWrapper";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -19,7 +20,9 @@ export default function RootLayout({ children }) {
       <body cz-shortcut-listen="true" className={inter.className}>
         <Providers>
           <Navbar />
-          <main>{children}</main>
+          <main>
+            <LayoutWrapper>{children}</LayoutWrapper>
+          </main>
           <Footer />
         </Providers>
       </body>
