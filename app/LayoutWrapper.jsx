@@ -14,8 +14,6 @@ export default function LayoutWrapper({ children }) {
 
       {/* Page content */}
       {children}
-
-      {!isAuthPage && <Footer />}
     </div>
   );
 }

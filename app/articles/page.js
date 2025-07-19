@@ -1,63 +1,105 @@
 "use client";
 
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { BlogNavigation } from "@/components/blog/Blog-navigation";
-import { BlogGrid } from "@/components/blog/Blog-gird";
-import { RecentActivity } from "@/components/blog/Recent-activity";
-import {
-  fetchArticles,
-  fetchFeaturedContent,
-  selectLoading,
-  selectError,
-} from "@/lib/features/blog/blogSlice";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ArrowRight, Search, Play } from "lucide-react";
 
-export default function BlogPage() {
-  const dispatch = useDispatch();
-  const loading = useSelector(selectLoading);
-  const error = useSelector(selectError);
-
+export default function ArticlesPage() {
   useEffect(() => {
-    dispatch(fetchArticles());
-    dispatch(fetchFeaturedContent());
-  }, [dispatch]);
+    const animateAurora = () => {
+      const aurora = document.querySelector(".aurora-bg");
+      if (aurora) {
+        aurora.style.background = `linear-gradient(135deg, #1e3a8a, #a855f7, #3b82f6, #f472b6, #ec4899)`;
+        aurora.animate(
+          [
+            {
+              background: "linear-gradient(135deg, #1e3a8a, #a855f7, #3b82f6)",
+            },
+            {
+              background: "linear-gradient(135deg, #f472b6, #ec4899, #3b82f6)",
+            },
+          ],
+          {
+            duration: 10000,
+            iterations: Infinity,
+            easing: "ease-in-out",
+          }
+        );
+      }
+    };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button
-            onClick={() => {
-              dispatch(fetchBlogPosts());
-              dispatch(fetchFeaturedContent());
-            }}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-          >
-            Try Again
-          </button>
-        </div>
-      </div>
-    );
-  }
+    animateAurora();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <RecentActivity />
-        <div className="mt-12">
-          <BlogNavigation />
-          <BlogGrid />
-        </div>
-      </div>
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-black text-white">
+      <div className="aurora-bg absolute inset-0 z-0 opacity-80 blur-xl"></div>
+      <motion.div
+        className="relative z-10 text-center px-4"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 1, delay: 0.5 }}
+      >
+        <motion.h1
+          className="inline-block text-6xl md:text-8xl font-extrabold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#1e3a8a] via-[#a855f7] to-[#3b82f6] leading-[1.2] overflow-visible"
+          initial={{ y: 60 }}
+          animate={{ y: 0 }}
+          transition={{ duration: 1, delay: 0.7 }}
+        >
+          Launching Soon...
+        </motion.h1>
+
+        <motion.div
+          className="flex justify-center space-x-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.1 }}
+        >
+          <a
+            href="info@birds-marektingag.com"
+            className="bg-[#3b82f6] hover:bg-[#a855f7] text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300"
+          >
+            Contact Us
+          </a>
+          <a
+            href="/contact"
+            className="bg-transparent border-2 border-[#a855f7] hover:bg-[#a855f7] text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300"
+          >
+            Notify Me
+          </a>
+        </motion.div>
+        <motion.div
+          className="mt-12 text-gray-400 text-sm"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 1.3 }}
+        >
+          © {new Date().getFullYear()} BIRDS. All rights reserved.
+        </motion.div>
+      </motion.div>
+      <style jsx>{`
+        .aurora-bg {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, #1e3a8a, #a855f7, #3b82f6);
+          animation: auroraFlow 10s ease-in-out infinite alternate;
+        }
+        @keyframes auroraFlow {
+          0% {
+            background: linear-gradient(135deg, #1e3a8a, #a855f7, #3b82f6);
+          }
+          50% {
+            background: linear-gradient(135deg, #f472b6, #ec4899, #3b82f6);
+          }
+          100% {
+            background: linear-gradient(135deg, #1e3a8a, #a855f6, #ec4899);
+          }
+        }
+      `}</style>
     </div>
   );
 }
