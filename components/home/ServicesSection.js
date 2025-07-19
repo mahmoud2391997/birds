@@ -136,7 +136,7 @@ export default function ServicesSection() {
 
   const handleDownloadBrochure = () => {
     const link = document.createElement("a");
-    link.href = "/birdsb.pdf";
+    link.href = "/birdsb1.pdf";
     link.download = "";
     document.body.appendChild(link);
     link.click();

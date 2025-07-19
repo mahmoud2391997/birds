@@ -47,7 +47,7 @@ const ProcessSteps = () => {
   const steps = [
     {
       number: "01",
-      title: "Book a Call",
+      title: "Book a Meeting",
       description:
         "Choose a date and time to book a discovery session, during which we'll define the project objectives, timeline, and budget.",
     },
