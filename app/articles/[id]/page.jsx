@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import ArticleClient from "./ArticleClient";
 
 export async function generateMetadata({ params }) {
-  const id = params.id;
+  const { id } = params;
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/${id}`, {
       cache: "no-store",
@@ -26,7 +26,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function ArticlePage({ params }) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/${params.id}`, {
+  const { id } = params;
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/blogs/${id}`, {
     cache: "no-store",
   });
   if (!response.ok) {

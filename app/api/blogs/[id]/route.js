@@ -5,7 +5,7 @@ import { NextResponse } from "next/server"
 export async function GET(request, { params }) {
   await dbConnect()
   try {
-    const { id } = params
+    const { id } = await params
     const blog = await BlogPost.findById(id)
     if (!blog) {
       return NextResponse.json({ message: "Blog not found" }, { status: 404 })
