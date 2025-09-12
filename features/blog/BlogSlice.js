@@ -22,6 +22,24 @@ export const fetchBlogPosts = createAsyncThunk(
   }
 );
 
+export const createArticle = createAsyncThunk(
+  "blog/createArticle",
+  async (data, { rejectWithValue }) => {
+    try {
+      const res = await fetch("/api/blogs", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) throw new Error(`HTTP error! Status: ${res.status}`);
+      return await res.json();
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+
 export const fetchBlogPostById = createAsyncThunk(
   "blog/fetchBlogPostById",
   async (id, { rejectWithValue }) => {
@@ -103,6 +121,17 @@ const blogSlice = createSlice({
       .addCase(fetchBlogPosts.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || "Failed to fetch blog posts";
+      })
+      .addCase(createArticle.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(createArticle.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.posts.unshift(action.payload);
+      })
+      .addCase(createArticle.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload || "Failed to create article";
       })
       .addCase(fetchBlogPostById.pending, (state) => {
         state.status = "loading";
