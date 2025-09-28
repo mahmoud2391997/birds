@@ -14,7 +14,7 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
@@ -23,7 +23,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/Dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 import {
   Card,
   CardContent,
