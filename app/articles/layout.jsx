@@ -1,19 +1,8 @@
-import { Inter } from "next/font/google";
-import { Providers } from "../providers";
-
-const inter = Inter({ subsets: ["latin"] });
-
-export const metadata = {
-  title: "Blog System",
-  description: "A modern blog system with Redux Toolkit",
-};
-
-export default function RootLayout({ children }) {
+// /app/articles/layout.tsx
+export default function ArticlesLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <Providers>{children}</Providers>
-      </body>
-    </html>
+    <div className="pt-24 px-4 bg-white text-black"> {/* padding-top علشان الـNavbar الثابت */}
+      {children}
+    </div>
   );
 }

@@ -47,7 +47,7 @@ export default function Home() {
       <HeroSection />
       <ServicesSection />
       <ContactSection />
-      <ComingSoon />
+      <BlogSection />
     </div>
   );
 }

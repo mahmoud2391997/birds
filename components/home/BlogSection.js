@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -8,33 +8,43 @@ import { ArrowRight } from "lucide-react";
 
 export default function BlogSection() {
   const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [blogPosts, setBlogPosts] = useState([]);
+  const [error, setError] = useState(null);
 
-  const blogPosts = [
-    {
-      id: 1,
-      title: "Portrait Photography Fundamentals",
-      excerpt: "Continue Course",
-      image: "/placeholder-portrait.jpg",
-      date: "Completed 12/16",
-      category: "Photography",
-    },
-    {
-      id: 2,
-      title: "History of Modern Art Movements",
-      excerpt: "Final Quiz",
-      image: "/placeholder-art.jpg",
-      date: "Completed 12/16",
-      category: "Art",
-    },
-    {
-      id: 3,
-      title: "Music Theory Basics",
-      excerpt: "Final Quiz",
-      image: "/placeholder-music.jpg",
-      date: "Completed 1/30",
-      category: "Music",
-    },
-  ];
+  useEffect(() => {
+    const fetchBlogPosts = async () => {
+      try {
+        const res = await fetch("/api/blogs?limit=3&sort=latest", {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch blog posts");
+        }
+
+        const data = await res.json();
+        // Map data to match the expected structure
+        const formattedPosts = data.map((post) => ({
+          id: post._id,
+          title: post.title,
+          excerpt: post.excerpt || "Continue Reading",
+          image: post.image || "/placeholder.svg",
+          date: new Date(post.publishedAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+          }),
+          category: post.category || "General",
+          slug: post.slug,
+        }));
+        setBlogPosts(formattedPosts);
+      } catch (err) {
+        setError(err.message || "Error fetching blog posts");
+      }
+    };
+
+    fetchBlogPosts();
+  }, []);
 
   return (
     <section
@@ -45,6 +55,14 @@ export default function BlogSection() {
         <h2 className="text-3xl font-bold text-center mb-12">
           Recent Activity
         </h2>
+
+        {error && (
+          <p className="text-red-500 text-center">{error}</p>
+        )}
+
+        {!error && blogPosts.length === 0 && (
+          <p className="text-gray-500 text-center">No recent blog posts available.</p>
+        )}
 
         <div className="flex justify-center gap-4">
           {blogPosts.map((post, index) => (
@@ -68,7 +86,7 @@ export default function BlogSection() {
             >
               <div className="relative h-48">
                 <Image
-                  src={post.image || "/placeholder.svg"}
+                  src={post.image}
                   alt={post.title}
                   fill
                   className="object-cover"
@@ -83,7 +101,7 @@ export default function BlogSection() {
                 <h3 className="text-xl font-bold mb-2">{post.title}</h3>
                 <p className="text-gray-600 mb-4">{post.excerpt}</p>
                 <Link
-                  href={`/articles/${post.id}`}
+                  href={`/articles/${post.slug}`}
                   className="inline-flex items-center justify-center text-[#0373fb] font-medium hover:text-[#0d60fa] transition-colors"
                 >
                   <svg
