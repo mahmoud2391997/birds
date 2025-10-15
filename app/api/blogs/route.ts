@@ -4,6 +4,8 @@ import BlogPost from "@/models/BlogPost";
 import dbConnect from "@/lib/mongodb";
 import { verifyToken } from "@/lib/jwt";
 
+export const runtime = 'nodejs';
+
 // Strongly-typed wrapper for mongoose ops
 const handleMongooseOperation = async <T>(operation: () => Promise<T>) => {
   try {

@@ -1,6 +1,8 @@
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 
+export const runtime = "nodejs";
+
 // Simple sanitization function
 function sanitize(input) {
   if (typeof input !== "string") return "";
